@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: 'home#index'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  resources :polls, only: [:index, :show]
+
+  namespace :admin do
+    resources :companies, only: [:new, :create, :edit, :update, :destroy]
+    resources :polls, only: [:new, :create, :update, :show, :destory]
+    resources :items
+  end
 end

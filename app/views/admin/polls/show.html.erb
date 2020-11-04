@@ -1,0 +1,30 @@
+<div class="nav mb-4">
+  <h3><%= @poll.title %></h3>
+  <% if @poll.open? %>
+    <div class="ml-auto"><%= link_to 'Close', admin_poll_path(@poll), class: 'btn btn-primary', method: "patch" %></div>
+  <% end %>
+</div>
+<% if @poll.open? %>
+  <%= form_with(url: admin_items_path, local: true) do |form| %>
+    <%= hidden_field_tag :poll_id, @poll.id %>
+    <div class="form-group mb-2">
+      <%= form.text_field :title, class: "form-control", placeholder: "Add poll item..." %>
+    </div>
+    <div class="d-flex justify-content-end">
+      <%= form.submit "Add", class: "btn btn-primary mb-5", data: { "disable-with": "Adding..." } %>
+    </div>
+  <% end %>
+<% end %>
+<% if @items.present? %>
+  <% @items.each do |item| %>
+    <div class="card shadow-sm rounded p-3 mb-3">
+      <div class="nav">
+        <div><%= item.title%></div>
+        <div class="ml-auto">
+          <%= item.votes.count %>
+          <%= link_to 'Remove', admin_item_path(item), class: "ml-3", method: "delete" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

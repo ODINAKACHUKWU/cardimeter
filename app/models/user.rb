@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :shares
+  has_many :shares, dependent: :destroy
   has_many :companies, through: :shares
 
   validates :first_name, presence: true, length: { minimum: 2 }
