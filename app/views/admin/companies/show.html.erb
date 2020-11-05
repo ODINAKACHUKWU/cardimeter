@@ -1,0 +1,27 @@
+<h3 class="mb-4 mt-5"><%= @company.name %></h3>
+<%= form_with(url: admin_shares_path, local: true) do |form| %>
+  <%= hidden_field_tag :company_id, @company.id %>
+  <div class="form-group mb-2">
+    <%= form.email_field :email, class: "form-control", placeholder: "Enter shareholder's email..." %>
+  </div>
+  <div class="form-group mb-2">
+    <%= form.number_field :units, class: "form-control", placeholder: "Enter shares unit...", min: "0", step: "1" %>
+  </div>
+  <div class="d-flex justify-content-end">
+    <%= form.submit 'Add shareholder', class: "btn btn-primary mb-2", data: { "disable-with": "Adding..." } %>
+  </div>
+<% end %>
+<% if @shareholders.present? %>
+  <h3 class="mb-4 mt-5">shareholders</h3>
+  <% @shareholders.each do |shareholder| %>
+    <div class="card shadow-sm rounded p-3 mb-3">
+      <div class="nav">
+        <div><%= shareholder.full_name%></div>
+        <div class="ml-auto">
+          <%= get_shares(shareholder).units %>
+          <%= link_to 'Edit', edit_admin_share_path(get_shares(shareholder)), class: "ml-3" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

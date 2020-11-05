@@ -2,6 +2,8 @@
   <h3><%= @poll.title %></h3>
   <% if @poll.open? %>
     <div class="ml-auto"><%= link_to 'Close', admin_poll_path(@poll), class: 'btn btn-primary', method: "patch" %></div>
+  <% else %>
+    <div class="ml-auto"><%= link_to 'Delete', admin_poll_path(@poll), class: 'btn btn-primary', method: "delete" %></div>
   <% end %>
 </div>
 <% if @poll.open? %>
@@ -22,7 +24,9 @@
         <div><%= item.title%></div>
         <div class="ml-auto">
           <%= item.votes.count %>
-          <%= link_to 'Remove', admin_item_path(item), class: "ml-3", method: "delete" %>
+          <% if @poll.open? %>
+            <%= link_to 'Remove', admin_item_path(item), class: "ml-3", method: "delete" %>
+          <% end %>
         </div>
       </div>
     </div>

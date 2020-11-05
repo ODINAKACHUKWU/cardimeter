@@ -5,8 +5,9 @@ Rails.application.routes.draw do
   resources :polls, only: [:index, :show]
 
   namespace :admin do
-    resources :companies, only: [:new, :create, :edit, :update, :destroy]
-    resources :polls, only: [:new, :create, :update, :show, :destory]
+    resources :companies, only: [:new, :create, :show, :edit, :update, :destroy]
+    resources :polls, only: [:index, :new, :create, :update, :show, :destroy]
     resources :items
+    resources :shares, only: [:create, :edit, :update]
   end
 end

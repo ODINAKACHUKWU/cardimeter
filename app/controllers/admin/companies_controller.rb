@@ -9,8 +9,13 @@ class Admin::CompaniesController < ApplicationController
     if @company.save
       redirect_to root_path, notice: "#{@company.name} was successfully added."
     else
-      render :new, alert: @company.errors.full_messages.first
+      redirect_to new_admin_company_path, alert: @company.errors.full_messages.first
     end
+  end
+
+  def show
+    @company = Company.find(params[:id])
+    @shareholders = @company.users
   end
 
   private

@@ -1,0 +1,12 @@
+<h3 class="mb-4 mt-5"><%= "Edit #{@user.full_name}'s share units" %></h3>
+<%= form_with(url: admin_share_path(@share), method: 'patch') do |form| %>
+  <div class="form-group mb-2">
+    <%= form.email_field :email, value: @user.email, class: "form-control", disabled: true %>
+  </div>
+  <div class="form-group mb-2">
+    <%= form.number_field :units, class: "form-control", placeholder: "Enter new shares unit...", min: "0", step: "1" %>
+  </div>
+  <div class="d-flex justify-content-end">
+    <%= form.submit 'Update', class: "btn btn-primary mb-2", data: { "disable-with": "Updating..." } %>
+  </div>
+<% end %>

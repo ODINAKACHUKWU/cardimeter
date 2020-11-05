@@ -1,5 +1,9 @@
 class Admin::PollsController < ApplicationController
-  before_action :set_poll, only: [:show, :update]
+  before_action :set_poll, only: [:show, :update, :destroy]
+
+  def index
+    @polls = Poll.all.order(created_at: :desc)
+  end
 
   def new
     @poll = Poll.new
@@ -11,12 +15,19 @@ class Admin::PollsController < ApplicationController
     if @poll.save
       redirect_to admin_poll_path(@poll), notice: "Poll created successfully. Add items to the poll"
     else
-      render :new, alert: @poll.errors.full_messages.first
+      render :new, alert: @poll.errors
     end
   end
 
   def show
     @items = @poll.items.order(created_at: :desc)
+  end
+
+  def destroy
+    unless @poll.open?
+      @poll.destroy
+      redirect_to admin_polls_path, notice: "Poll deleted successfully."
+    end
   end
 
   def update

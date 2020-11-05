@@ -2,12 +2,27 @@
   <h3>Hello <%= current_user.first_name %>! Welcome back.</h3>
 <% end %>
 <% if current_user.is_admin? %>
-  <ul class="nav">
+  <ul class="nav mb-4">
     <li class="nav-item">
       <%= link_to 'Add company', new_admin_company_path, class: "nav-link btn-primary mr-2" %>
     </li>
     <li class="nav-item">
-      <%= link_to 'Create a poll', new_admin_poll_path, class: "nav-link btn-primary" %>
+      <%= link_to 'Create a poll', new_admin_poll_path, class: "nav-link btn-primary mr-2" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to 'Polls', admin_polls_path, class: "nav-link btn-primary" %>
     </li>
   </ul>
+  <div class="row">
+    <h3 class="mb-4">Companies</h3>
+    <% if @companies.present? %>
+      <% @companies.each do |company| %>
+        <%= link_to admin_company_path(company) do %>
+          <div class="card shadow-sm rounded p-3 mb-3">
+            <%= company.name %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
 <% end %>
