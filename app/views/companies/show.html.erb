@@ -1,0 +1,17 @@
+<h3 class="mb-5"><%= "#{@company.name}'s polls" %></h3>
+<% if @polls.present? %>
+  <% @polls.each do |poll| %>
+    <%= link_to poll_path(poll) do %>
+      <div class="card shadow-sm rounded p-3 mb-3">
+        <div class="nav">
+          <div><%= poll.title%></div>
+          <div class="ml-auto">
+            <%= poll.status ? "Open" : "Closed" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% else %>
+  <p>There are no polls.</p>
+<% end %>

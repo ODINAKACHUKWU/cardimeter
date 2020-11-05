@@ -1,9 +1,22 @@
 <div class="nav mb-4">
   <h3><%= @poll.title %></h3>
   <% if @poll.open? %>
-    <div class="ml-auto"><%= link_to 'Close', admin_poll_path(@poll), class: 'btn btn-primary', method: "patch" %></div>
+    <div class="ml-auto">
+      <%= link_to "Close", admin_poll_path(@poll), class: "btn btn-primary", method: "patch" %>
+      <% unless @poll.published? %>
+        <%= link_to "Publish", "/admin/polls/#{@poll.id}/publish", class: "btn btn-primary", method: "patch" %>
+      <% end %>
+    </div>
   <% else %>
-    <div class="ml-auto"><%= link_to 'Delete', admin_poll_path(@poll), class: 'btn btn-primary', method: "delete" %></div>
+    <div class="ml-auto">
+      <% unless @poll.shared? %>
+        <%= link_to "Share result", "/admin/polls/#{@poll.id}/share", class: "btn btn-primary", method: "patch" %>
+      <% end %>
+      <%= link_to "Delete", admin_poll_path(@poll), class: "btn btn-primary", method: "delete" %>
+      <% unless @poll.published? %>
+        <%= link_to "Publish", "/admin/polls/#{@poll.id}/publish", class: "btn btn-primary", method: "patch" %>
+      <% end %>
+    </div>
   <% end %>
 </div>
 <% if @poll.open? %>
@@ -21,14 +34,28 @@
   <% @items.each do |item| %>
     <div class="card shadow-sm rounded p-3 mb-3">
       <div class="nav">
-        <div><%= item.title%></div>
+        <div class="d-flex align-items-center">
+          <%= radio_button_tag :item_id, item.id %>
+          <span class="ml-3"><%= item.title %></span>
+        </div>
         <div class="ml-auto">
-          <%= item.votes.count %>
+          <span class="mr-3"><%= "#{count(item)} vote#{count(item) > 0 ? "s" : ""}" %></span>|
+          <span class="ml-3"><%= estimate_percent_vote(@items, item.votes.map(&:counts).sum) %></span>
           <% if @poll.open? %>
-            <%= link_to 'Remove', admin_item_path(item), class: "ml-3", method: "delete" %>
+            <%= link_to "Remove", admin_item_path(item), class: "ml-3", method: "delete" %>
           <% end %>
         </div>
       </div>
     </div>
   <% end %>
+  <div class="card shadow-sm rounded p-3">
+    <div class="nav">
+        <div class="d-flex align-items-center">
+          TOTAL VOTES CASTED
+        </div>
+        <div class="ml-auto">
+          <%= compute_total_votes(@items) %>
+        </div>
+      </div>
+  </div>
 <% end %>

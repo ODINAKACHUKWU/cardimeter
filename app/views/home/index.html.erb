@@ -1,5 +1,5 @@
 <% unless current_user.is_admin? %>
-  <h3>Hello <%= current_user.first_name %>! Welcome back.</h3>
+  <h3 class="mb-5">Hello <%= current_user.first_name %>! Welcome back.</h3>
 <% end %>
 <% if current_user.is_admin? %>
   <ul class="nav mb-4">
@@ -25,4 +25,18 @@
       <% end %>
     <% end %>
   </div>
+<% else %>
+  <% if @companies.present? %>
+    <h4 class="mb-4">My companies</h4>
+    <% @companies.each do |company| %>
+      <%= link_to company_path(company) do %>
+        <div class="card shadow-sm rounded p-3 mb-3">
+          <%= company.name %>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <p class="paragraph">You don't own shares in any company yet. Please contact admin to assign shares to you before you can cast votes on polls.</p>
+  <% end %>
+</div>
 <% end %>

@@ -1,8 +1,8 @@
 class Admin::PollsController < ApplicationController
-  before_action :set_poll, only: [:show, :update, :destroy]
+  before_action :set_poll, only: [:show, :update, :destroy, :publish, :share]
 
   def index
-    @polls = Poll.all.order(created_at: :desc)
+    @polls = @app.all_polls
   end
 
   def new
@@ -16,6 +16,26 @@ class Admin::PollsController < ApplicationController
       redirect_to admin_poll_path(@poll), notice: "Poll created successfully. Add items to the poll"
     else
       render :new, alert: @poll.errors
+    end
+  end
+
+  def publish
+    @poll.publish = true
+    @poll.published_at = Time.now
+    if @poll.save
+      redirect_to admin_poll_path(@poll), notice: "Poll published successfully."
+    else
+      redirect_to admin_poll_path(@poll), alert: @poll.errors
+    end
+  end
+
+  def share
+    @poll.share = true
+    @poll.shared_at = Time.now
+    if @poll.save
+      redirect_to admin_poll_path(@poll), notice: "Poll's result shared successfully."
+    else
+      redirect_to admin_poll_path(@poll), alert: @poll.errors
     end
   end
 

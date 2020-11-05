@@ -1,0 +1,48 @@
+<h3 class="mb-5"><%= @poll.title %></h3>
+<% unless @poll.shared? %>
+  <%= form_with(url: votes_path, local: true) do |form| %>
+    <%= hidden_field_tag :company_id, @poll.company.id %>
+    <%= hidden_field_tag :poll_id, @poll.id %>
+    <% if @items.present? %>
+      <% @items.each do |item| %>
+        <div class="card shadow-sm rounded p-3 mb-3">
+          <div class="d-flex align-items-center">
+            <%= radio_button_tag :item_id, item.id %>
+            <span class="ml-3"><%= label_tag :item, item.title %></span>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    <div class="d-flex justify-content-end">
+      <%= link_to "Back", company_path(@poll.company.id), class: "btn btn-primary mr-2" %>
+      <%= form.submit "Submit", class: "btn btn-primary", data: { "disable-with": "Submitting..." } %>
+    </div>
+  <% end %>
+<% else %>
+  <% if @items.present? %>
+    <% @items.each do |item| %>
+      <div class="card shadow-sm rounded p-3 mb-3">
+        <div class="nav">
+          <div class="d-flex align-items-center">
+            <%= radio_button_tag :item_id, item.id %>
+            <span class="ml-3"><%= label_tag :item, item.title %></span>
+          </div>
+          <div class="ml-auto">
+            <span class="mr-3"><%= "#{count(item)} vote#{count(item) > 0 ? "s" : ""}" %></span>|
+            <span class="ml-3"><%= estimate_percent_vote(@items, item.votes.map(&:counts).sum) %></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  <div class="card shadow-sm rounded p-3">
+    <div class="nav">
+        <div class="d-flex align-items-center">
+          TOTAL VOTES CASTED
+        </div>
+        <div class="ml-auto">
+          <%= compute_total_votes(@items) %>
+        </div>
+      </div>
+  </div>
+<% end %>

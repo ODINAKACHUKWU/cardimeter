@@ -8,4 +8,12 @@ class Poll < ApplicationRecord
   def open?
     status
   end
+
+  def published?
+    publish
+  end
+
+  def shared?
+    share
+  end
 end

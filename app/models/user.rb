@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :shares, dependent: :destroy
   has_many :companies, through: :shares
+  has_many :votes
 
   validates :first_name, presence: true, length: { minimum: 2 }
   validates :last_name, presence: true, length: { minimum: 2 }
