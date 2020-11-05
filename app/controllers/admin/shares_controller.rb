@@ -3,7 +3,7 @@ class Admin::SharesController < ApplicationController
   before_action :set_share, only: [:edit, :update]
 
   def create
-    return redirect_to admin_company_path(params[:company_id]), notice: "Please provide the required email and shares units." unless @user.present?
+    return redirect_to admin_company_path(params[:company_id]), notice: "Please provide an existing user email and shares units." unless @user.present?
 
     share = get_user_share
     return redirect_to admin_company_path(params[:company_id]), notice: "#{@user.full_name} has already been assigned shares." if share.present?
@@ -12,7 +12,7 @@ class Admin::SharesController < ApplicationController
     if @share.save
       redirect_to admin_company_path(params[:company_id]), notice: "#{@user.full_name} has been assigned shares."
     else
-      redirect_to admin_company_path(params[:company_id]), alert: @share.errors.full_messages.first  
+      redirect_to admin_company_path(params[:company_id]), alert: @share.errors.full_messages.first
     end
   end
 
@@ -25,7 +25,7 @@ class Admin::SharesController < ApplicationController
     if @share.save
       redirect_to admin_company_path(@share.company_id), notice: "#{@share.user.full_name}'s shares has been updated."
     else
-      redirect_to admin_company_path(@share.company_id), alert: @share.errors.full_messages.first  
+      redirect_to admin_company_path(@share.company_id), alert: @share.errors.full_messages.first
     end
   end
 
